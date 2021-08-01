@@ -13,7 +13,7 @@ for multi-texture, 1.16 model does not support multi texture so if the initial m
 
 For any modification after my tool, i recommand importing it in blockbench as my output file doesn't contain breakline or tabulation so it is especialy hard to read.
 
-Also your anty virus my not like the program at first (because i just compiled and there is no sertificate). if you want there is the source code available if you want to modifie/recompile the program.
+Also your anti virus may not like the program at first (because i just compiled and there is no certificates). if you want there is the source code available if you want to modifie/recompile the program.
 
 ▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀
 

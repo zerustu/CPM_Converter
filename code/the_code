@@ -1,4 +1,7 @@
 this is the code for the program.
 It is in C# and not well written.
 
+The solution can be open in microsoft Visual studio.
+Newtonsoft.Json NuGet package is use to handle the json.
+
 also sorry for my english.

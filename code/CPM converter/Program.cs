@@ -72,10 +72,10 @@ namespace CPM_converter
 			},
 			" + '"' + "bones" + '"' + @": " + JsonConvert.SerializeObject(boneslist, settings)+@"}]}";
             newgeo = newgeo.Replace(".0,", ",").Replace(".0]", "]");
-            string newpath = path.Remove(path.Length - 5);
+            string newpath = path.Remove(path.LastIndexOf('\\')+1)+newmod.name;
             Directory.CreateDirectory(newpath);
             File.WriteAllText(newpath + @"\model.json", newmodeljson);
-            File.WriteAllText(newpath + @"\model.geo.json", newgeo);
+            File.WriteAllText(newpath + @"\"+newmod.name + ".geo.json", newgeo);
             Console.Clear();
             Console.WriteLine("The new file is ready, bye");
             Console.ReadKey();

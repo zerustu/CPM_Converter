@@ -14,6 +14,14 @@ namespace CPM_converter
         public string author;
         public Bone[] bones;
         public skel skeleton;
+
+        public model()
+        {
+            this.modelId = "convertedmodel";
+            this.modelName = "converted model";
+            this.version = "1.0";
+            this.author = "unknown";
+        }
     }
     class skel
     {

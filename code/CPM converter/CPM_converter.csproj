@@ -6,6 +6,7 @@
     <RootNamespace>CPM_converter</RootNamespace>
     <Authors>zerustu</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

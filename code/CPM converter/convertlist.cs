@@ -50,7 +50,7 @@ namespace CPM_converter
                         cantconvertyet.Add(piv_bone);
                         numbertoconvert++;
                     }
-                    if (convertedbone.Contains(bone.parent))
+                    if (convertedbone.Contains(bone.parent)|| bone.parent == null)
                     {
                         if (bone.parent == "head")
                         {
@@ -64,25 +64,25 @@ namespace CPM_converter
                         }
                         else if (bone.parent == "left_arm")
                         {
-                            bone.pivot[0] += Program.skeletonparam.arm_interval/2;
+                            bone.pivot[0] += Program.skeletonparam.arm_interval / 2;
                             bone.pivot[1] += Program.skeletonparam.arm_pivot_height;
                         }
                         else if (bone.parent == "right_arm")
                         {
-                            bone.pivot[0] -= Program.skeletonparam.arm_interval/2;
+                            bone.pivot[0] -= Program.skeletonparam.arm_interval / 2;
                             bone.pivot[1] += Program.skeletonparam.arm_pivot_height;
                         }
                         else if (bone.parent == "left_leg")
                         {
-                            bone.pivot[0] += Program.skeletonparam.leg_interval/2;
+                            bone.pivot[0] += Program.skeletonparam.leg_interval / 2;
                             bone.pivot[1] += Program.skeletonparam.leg_length;
                         }
                         else if (bone.parent == "right_leg")
                         {
-                            bone.pivot[0] -= Program.skeletonparam.leg_interval/2;
+                            bone.pivot[0] -= Program.skeletonparam.leg_interval / 2;
                             bone.pivot[1] += Program.skeletonparam.leg_length;
                         }
-                        else
+                        else if (bone.parent != null)
                         {
                             bone.pivot[0] *= -1;
                             parentbone = listnewbone.Find(x => x.name == bone.parent);

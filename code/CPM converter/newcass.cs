@@ -12,10 +12,12 @@ namespace CPM_converter
         public string description;
         public Dictionary<string, object> skeleton;
         public Dictionary<string, object>[] parts;
+        public Dictionary<string, float[]> size;
+        public Dictionary<string, float[]> eye_height;
 
         public newmodel(model model, parameters param)
         {
-            name = model.modelName;
+            name = model.modelName.Replace(" ", "_");
             version = model.version;
             author = model.author.Split(',', StringSplitOptions.RemoveEmptyEntries);
             description = "converted model using zerustu's tool";
@@ -25,7 +27,16 @@ namespace CPM_converter
             { "param", param }
             };
             parts = new Dictionary<string, object>[1];
-            parts[0] = new Dictionary<string, object>() { { "name", "model.geo" }, { "texture", Program.texturename } };
+            parts[0] = new Dictionary<string, object>() { { "name", name + ".geo" }, { "texture", Program.texturename } };
+            size = model.boundingBox;
+            if (model.eyeHeight != null)
+            {
+                eye_height = new Dictionary<string, float[]>();
+                foreach (KeyValuePair<string, float> item in model.eyeHeight)
+                {
+                    eye_height.Add(item.Key, new float[2] { item.Value, 0 });
+                }
+            }
         }
     }
 
@@ -127,7 +138,11 @@ namespace CPM_converter
             {
                 if (!bone.Texture.StartsWith("if")& Program.texturename == "N/A")
                 {
-                Program.texturename = bone.Texture.Remove(0, 4);
+                    Program.texturename = bone.Texture.Remove(0, 4);
+                    if (bone.TextureSize != null)
+                    {
+                        Program.texturesize = bone.TextureSize;
+                    }
                 }
             }
         }

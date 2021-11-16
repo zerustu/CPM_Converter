@@ -13,8 +13,6 @@ for multi-texture, 1.16 model does not support multi texture so if the initial m
 
 For any modification after my tool, i recommand importing it in blockbench as my output file doesn't contain breakline or tabulation so it is especialy hard to read.
 
-Also your anti virus may not like the program at first (because i just compiled and there is no certificates). if you want there is the source code available if you want to modifie/recompile the program.
-
 ▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀
 
 # HOW TO USE:
@@ -24,15 +22,25 @@ You must provide a full path to the model.json file (exemple : C:\Users\zerustu\
 
 -during the conversion, the programme may ask the value for variables use in the model (for animation in the position or rotation of bones).
 You may enter the value for the ask variable
+
 NOTE:   only number are accepted (can be decimal). for boolean, enter 1 if the boolean is true and 0 if it is false.
 	The tool will display the formula in witch it have found the variable in the model. IT DOES NOT ASK THE FINAL VALUE OF THE FORMULA, just enter the ask varaible value and it will calculate the final value by it-self.
 
--in the end, it will ask the texture width and height. if the model use the default resolution of minecraft, it will be the real size of the texture file.
-if the model use a higher resolution, the enter value might be a multible/fraction of the real size. If once finish, the texture is not correct, try changing the texture size in the model.geo.json file.
+-The tool should be able to detect the size of the texture file. If once finish, the texture is not correct, try changing the texture size in the model.geo.json file.
 
 ▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀
 
-# Credit:
+# UPDATE:
+1.2:
+	-Auto-detect the texture size (custom resolution or default size)
+	-read variables and tickvars (for tickvars, the initialisation value will be used)
+	-add default value for is_first_person and age
+	-fix the geometry file having defernt name in the model.json then the real file
+	-auto copy the texturefile (so you don't have to :) )
+
+▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀
+
+Credit:
 
 zerustu (me) for the program.
 

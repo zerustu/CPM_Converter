@@ -13,7 +13,6 @@ namespace CPM_converter
         static List<string> convertedbone = new List<string>() {"head", "body", "left_arm",  "right_arm", "left_leg", "right_leg"};
         static List<newbone> cantconvertyet = new List<newbone>();
         static List<newbone> toconvert;
-        static Dictionary<string, float> variable = new Dictionary<string, float>() { { "is_sneaking", 0 } };
         static int j;
         static float[] zeros = new float[] { 0, 0, 0 };
 
@@ -34,6 +33,8 @@ namespace CPM_converter
 
         static public List<newbone> convertbones(newbone[] list)
         {
+            int[] curspos = new int[] { Console.CursorLeft, Console.CursorTop };
+            int total = list.Length;
             List<newbone> listnewbone = new List<newbone>();
             newbone parentbone;
             toconvert = new List<newbone>(list);
@@ -105,6 +106,8 @@ namespace CPM_converter
                         convertedbone.Add(bone.name);
                         listnewbone.Add(bone);
                         numbertoconvert--;
+                        Console.SetCursorPosition(curspos[0], curspos[1]);
+                        Console.WriteLine((total - numbertoconvert) + "/" + total);
                     }
                     else
                     {
@@ -221,7 +224,7 @@ namespace CPM_converter
                     j++;
                     return readeexpression2(expression, new node(temp, new node[] { value1, value2 }));
                 }
-                if (!variable.ContainsKey(temp))
+                if (!Program.variable.ContainsKey(temp))
                 {
                     Console.WriteLine("a variable was detected : " + temp);
                     Console.WriteLine("in the expression : " + expression);
@@ -242,9 +245,9 @@ namespace CPM_converter
                     Console.WriteLine(new string(' ', Console.WindowWidth-1));
                     Console.WriteLine(new string(' ', Console.WindowWidth-1));
                     Console.CursorTop -= 4;
-                    variable.Add(temp, value);
+                    Program.variable.Add(temp, value);
                 }
-                return readeexpression2(expression, new node(variable[temp]));
+                return readeexpression2(expression, new node(Program.variable[temp]));
             }
             return new node(0);
         }
@@ -418,7 +421,7 @@ namespace CPM_converter
                     j++;
                     return new node(temp, new node[] { value1, value2 });
                 }
-                if (!variable.ContainsKey(temp))
+                if (!Program.variable.ContainsKey(temp))
                 {
                     Console.WriteLine("a variable was detected : " + temp);
                     Console.WriteLine("in the expression : " + expression);
@@ -439,9 +442,9 @@ namespace CPM_converter
                     Console.WriteLine(new string(' ', Console.WindowWidth-1));
                     Console.WriteLine(new string(' ', Console.WindowWidth-1));
                     Console.CursorTop -= 4;
-                    variable.Add(temp, value);
+                    Program.variable.Add(temp, value);
                 }
-                return new node(variable[temp]);
+                return new node(Program.variable[temp]);
             }
             return new node(0);
         }

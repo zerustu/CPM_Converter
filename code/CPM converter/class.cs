@@ -14,6 +14,10 @@ namespace CPM_converter
         public string author;
         public Bone[] bones;
         public skel skeleton;
+        public Dictionary<string, string> variables;
+        public Dictionary<string, string[]> tickVars;
+        public Dictionary<string, float> eyeHeight;
+        public Dictionary<string, float[]> boundingBox;
 
         public model()
         {
@@ -21,6 +25,8 @@ namespace CPM_converter
             this.modelName = "converted model";
             this.version = "1.0";
             this.author = "unknown";
+            this.variables = new Dictionary<string, string>();
+            this.tickVars = new Dictionary<string, string[]>();
         }
     }
     class skel
@@ -86,6 +92,7 @@ namespace CPM_converter
         string[] position;
         string[] rotation;
         boxe[] boxes;
+        int[] textureSize;
 
         public string Id { get => id; set => id = value; }
         public string Parent { get => parent; set => parent = value; }
@@ -93,6 +100,7 @@ namespace CPM_converter
         public string[] Position { get => position; set => position = value; }
         public string[] Rotation { get => rotation; set => rotation = value; }
         public boxe[] Boxes { get => boxes; set => boxes = value; }
+        public int[] TextureSize { get => textureSize; }
     }
     class bonetoken
     {
@@ -109,7 +117,5 @@ namespace CPM_converter
         public float[] Position { get => position; set => position = value; }
         public float[] Rotation { get => rotation; set => rotation = value; }
         public boxe[] Boxes { get => boxes; set => boxes = value; }
-
-        
     }
 }

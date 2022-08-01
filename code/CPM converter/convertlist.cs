@@ -208,6 +208,14 @@ namespace CPM_converter
                         end = true;
                     }
                 }
+                if (temp == "true")
+                {
+                    return readeexpression2(expression, new node(1));
+                }
+                if (temp == "false")
+                {
+                    return readeexpression2(expression, new node(0));
+                }
                 if (onenumberfunction.Contains(temp))
                 {
                     j++;
@@ -224,9 +232,10 @@ namespace CPM_converter
                     j++;
                     return readeexpression2(expression, new node(temp, new node[] { value1, value2 }));
                 }
+                temp = temp.Replace('.', '_');
                 if (!Program.variable.ContainsKey(temp))
                 {
-                    Console.WriteLine("a variable was detected : " + temp);
+                    /*Console.WriteLine("a variable was detected : " + temp);
                     Console.WriteLine("in the expression : " + expression);
                     Console.WriteLine("what is its value? (for boolean, 0 for false and 1 for true)");
                     float value;
@@ -244,10 +253,10 @@ namespace CPM_converter
                     Console.WriteLine(new string(' ', Console.WindowWidth-1));
                     Console.WriteLine(new string(' ', Console.WindowWidth-1));
                     Console.WriteLine(new string(' ', Console.WindowWidth-1));
-                    Console.CursorTop -= 4;
-                    Program.variable.Add(temp, value);
+                    Console.CursorTop -= 4;*/
+                    Program.variable.Add(temp, 0);
                 }
-                return readeexpression2(expression, new node(Program.variable[temp]));
+                return readeexpression2(expression, new node(temp));
             }
             return new node(0);
         }
@@ -405,6 +414,14 @@ namespace CPM_converter
                         end = true;
                     }
                 }
+                if (temp == "true")
+                {
+                    return new node(1);
+                }
+                if (temp == "false")
+                {
+                    return new node(0);
+                }
                 if (onenumberfunction.Contains(temp))
                 {
                     j++;
@@ -421,9 +438,10 @@ namespace CPM_converter
                     j++;
                     return new node(temp, new node[] { value1, value2 });
                 }
+                temp = temp.Replace('.', '_');
                 if (!Program.variable.ContainsKey(temp))
                 {
-                    Console.WriteLine("a variable was detected : " + temp);
+                    /*Console.WriteLine("a variable was detected : " + temp);
                     Console.WriteLine("in the expression : " + expression);
                     Console.Write("what is its value? (for boolean, 0 for false and 1 for true)");
                     float value;
@@ -441,10 +459,10 @@ namespace CPM_converter
                     Console.WriteLine(new string(' ', Console.WindowWidth-1));
                     Console.WriteLine(new string(' ', Console.WindowWidth-1));
                     Console.WriteLine(new string(' ', Console.WindowWidth-1));
-                    Console.CursorTop -= 4;
-                    Program.variable.Add(temp, value);
+                    Console.CursorTop -= 4;*/
+                    Program.variable.Add(temp, 0);
                 }
-                return new node(Program.variable[temp]);
+                return new node(temp);
             }
             return new node(0);
         }
@@ -454,6 +472,10 @@ namespace CPM_converter
             if (lanode.Type == "value")
             {
                 return lanode.Value;
+            }
+            if (lanode.Type == "variable")
+            {
+                return Program.variable[lanode.VarName];
             }
             float[] lesvaleurs = new float[lanode.Child.Length];
             for (int i = 0; i < lanode.Child.Length; i++)
@@ -574,6 +596,58 @@ namespace CPM_converter
         static bool iszeros(float[] value)
         {
             return value[0] == 0 & value[1] == 0 & value[2] == 0;
+        }
+
+        static string unnode(node expr)
+        {
+            if (expr == null) return null;
+            if (expr.Type == "value") return expr.Value.ToString();
+            if (expr.Type == "variable") return expr.VarName;
+            if (expr.Type == "if") throw new Exception("an if should not be unnode, the animation will be lost");
+            if (onenumberfunction.Contains(expr.Type)) return $"{expr.Type}({unnode(expr.Child[0])})";
+            if (twonumberfunction.Contains(expr.Type)) return $"{expr.Type}({unnode(expr.Child[0])},{unnode(expr.Child[1])})";
+            if (expr.Type == "!") return $"!{unnode(expr.Child[0])}";
+            return $"({unnode(expr.Child[0])}{expr.Type}{unnode(expr.Child[1])})";
+        }
+
+        static string node_to_code(node expr, string varName)
+        {
+            try
+            {
+                if (expr.Type == "value") return $"{varName} = {expr.Value};\n";
+                if (expr.Type == "variable") return $"{varName} = {expr.VarName};\n";
+                if (expr.Type == "if") return $"if({unnode(expr.Child[0])})\n" + "{\n" + node_to_code(expr.Child[1], varName) + "}\nelse\n{\n" + node_to_code(expr.Child[2], varName) + "}\n";
+                if (onenumberfunction.Contains(expr.Type)) return node_to_code(expr.Child[0], varName) + $"{varName} = {expr.Type}({varName});\n";
+                if (twonumberfunction.Contains(expr.Type)) return $"{varName} = {unnode(expr)};\n";
+                if (expr.Type == "!") return node_to_code(expr.Child[0], varName) + $"{varName} = !{varName};\n";
+                string type_of_one = expr.Child[0].Type;
+                if (type_of_one == "value") return node_to_code(expr.Child[1], varName) + $"{varName} = {expr.Child[0].Value} {expr.Type} {varName};\n";
+                if (type_of_one == "varaible") return node_to_code(expr.Child[1], varName) + $"{varName} = {expr.Child[0].VarName} {expr.Type} {varName};\n";
+                type_of_one = expr.Child[1].Type;
+                if (type_of_one == "value") return node_to_code(expr.Child[0], varName) + $"{varName} = {varName} {expr.Type} {expr.Child[1].Value} ;\n";
+                if (type_of_one == "varaible") return node_to_code(expr.Child[0], varName) + $"{varName} = {varName} {expr.Type}  {expr.Child[1].VarName};\n";
+                return $"{varName} = {unnode(expr)};\n";
+            }
+            catch (Exception)
+            {
+                return "Console.log(\"something went wrong here, some code has been lost\");\ntemp = 0;\n";
+            }
+        }
+
+        static public string setvar(string varname, string varvalue)
+        {
+            string res = "";
+            if (varvalue.Contains("if("))
+            {
+                j = 0;
+                node expr = readeexpression1(varvalue.Replace(" ", string.Empty));
+                res = node_to_code(expr, varname);
+            }
+            else
+            {
+                res = varname + " = " + varvalue + "\n";
+            }
+            return res;
         }
     }
 }

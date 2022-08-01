@@ -103,12 +103,19 @@ namespace CPM_converter
         {
             name = bone.Id;
             parent = bone.Parent;
+            float value = 0;
             if (bone.Position != null)
             {
                 pivot = new float[3];
                 for (int i = 0; i < 3; i++)
                 {
-                    pivot[i] = convertlist.stringToDoble(bone.Position[i]);
+                    value = convertlist.stringToDoble(bone.Position[i]);
+                    pivot[i] = value;
+                    if (value.ToString() != bone.Position[i])
+                    {
+                        Program.animation += convertlist.setvar("temp", bone.Position[i]);
+                        Program.animation += $"model.getBone({name}).setPositionX(temp);\n";
+                    }
                 }
             }
             else

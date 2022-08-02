@@ -106,11 +106,6 @@ namespace CPM_converter
             name = bone.Id.Replace(' ', '_');
             parent = bone.Parent.Replace(' ', '_');
             float value = 0;
-            if (bone.Visible != null)
-            {
-                Program.animation += convertlist.setvar(name + "_visib", bone.Visible);
-                Program.animation += $"model.getBone(\"{name}\").setVisible({name}_visib);\n";
-            }
             if (bone.Position != null)
             {
                 pivot = new float[3];

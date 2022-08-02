@@ -18,13 +18,7 @@ For any modification after my tool, i recommand importing it in blockbench as my
 # HOW TO USE:
 
 -when run, the programme will first ask the model file.
-You must provide a full path to the model.json file (exemple : C:\Users\zerustu\AppData\Roaming\.minecraft 1.12\custom-models\kemono\model.json)
-
--during the conversion, the programme may ask the value for variables use in the model (for animation in the position or rotation of bones).
-You may enter the value for the ask variable
-
-NOTE:   only number are accepted (can be decimal). for boolean, enter 1 if the boolean is true and 0 if it is false.
-	The tool will display the formula in witch it have found the variable in the model. IT DOES NOT ASK THE FINAL VALUE OF THE FORMULA, just enter the ask varaible value and it will calculate the final value by it-self.
+You must provide a full path to the unziped model folder (exemple : "C:\Users\zerustu\AppData\Roaming\.minecraft 1.12\custom-models\Ori")
 
 -The tool should be able to detect the size of the texture file. If once finish, the texture is not correct, try changing the texture size in the model.geo.json file.
 
@@ -37,6 +31,10 @@ NOTE:   only number are accepted (can be decimal). for boolean, enter 1 if the b
 	-add default value for is_first_person and age
 	-fix the geometry file having defernt name in the model.json then the real file
 	-auto copy the texturefile (so you don't have to :) )
+
+2.0:
+	-create a animation file to keep the animation from 1.12 model
+	(only position and rotation animation are kept for now, and some variables aren't converted)
 
 ▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀
 

@@ -34,9 +34,10 @@ namespace CPM_converter
                 eye_height = new Dictionary<string, float[]>();
                 foreach (KeyValuePair<string, float> item in model.eyeHeight)
                 {
-                    eye_height.Add(item.Key, new float[2] { item.Value, 0 });
+                    if (item.Key != "dying") eye_height.Add(item.Key, new float[2] { item.Value, 0 });
                 }
             }
+            size.Remove("dying");
         }
     }
 
@@ -104,7 +105,8 @@ namespace CPM_converter
         public newbone(Bone bone)
         {
             name = bone.Id.Replace(' ', '_');
-            parent = bone.Parent.Replace(' ', '_');
+            parent = bone.Parent;
+            if (parent != null) parent = parent.Replace(' ', '_');
             float value = 0;
             if (bone.Position != null)
             {

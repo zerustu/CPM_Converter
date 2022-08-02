@@ -17,7 +17,7 @@ namespace CPM_converter
 
         public newmodel(model model, parameters param)
         {
-            name = model.modelName.Replace(" ", "_");
+            name = model.modelName.Replace(" ", "_") + "_converted";
             version = model.version;
             author = model.author.Split(',', StringSplitOptions.RemoveEmptyEntries);
             description = "converted model using zerustu's tool";
@@ -98,17 +98,26 @@ namespace CPM_converter
         public float[] pivot;
         public float[] rotation;
         public newcube[] cubes;
+        static string[] axis = { "X", "Y", "Z" };
+        static int[] axisrerout = { 1, 0, 2 };
 
         public newbone(Bone bone)
         {
-            name = bone.Id;
-            parent = bone.Parent;
+            name = bone.Id.Replace(' ', '_');
+            parent = bone.Parent.Replace(' ', '_');
+            float value = 0;
             if (bone.Position != null)
             {
                 pivot = new float[3];
                 for (int i = 0; i < 3; i++)
                 {
-                    pivot[i] = convertlist.stringToDoble(bone.Position[i]);
+                    value = convertlist.stringToDoble(bone.Position[i]);
+                    pivot[i] = value;
+                    if (value.ToString() != bone.Position[i] && value.ToString().Replace(',','.') != bone.Position[i])
+                    {
+                        Program.animation += convertlist.setvar(name + "P" + axis[i], bone.Position[i]);
+                        Program.animation += $"model.getBone(\"{name}\").setPosition{axis[i]}({name + "P" + axis[i] + (i == 0 ? "*-1" : "")});\n";
+                    }
                 }
             }
             else
@@ -118,9 +127,17 @@ namespace CPM_converter
             if (bone.Rotation != null)
             {
                 rotation = new float[3];
-                rotation[0] = convertlist.stringToDoble(bone.Rotation[1]);
-                rotation[1] = convertlist.stringToDoble(bone.Rotation[0]);
-                rotation[2] = convertlist.stringToDoble(bone.Rotation[2]);
+                for (int i = 0; i < 3; i++)
+                {
+                    int j = axisrerout[i];
+                    value = convertlist.stringToDoble(bone.Rotation[i]);
+                    rotation[j] = value;
+                    if (value.ToString() != bone.Rotation[i] && value.ToString().Replace(',', '.') != bone.Rotation[i])
+                    {
+                        Program.animation += convertlist.setvar(name+"R"+axis[j], bone.Rotation[i]);
+                        Program.animation += $"model.getBone(\"{name}\").setRotation{axis[j]}({name + "R" + axis[j]});\n";
+                    }
+                }
             }
             else
             {

@@ -13,6 +13,15 @@ namespace CPM_converter
         static List<string> convertedbone = new List<string>() {"head", "body", "left_arm",  "right_arm", "left_leg", "right_leg"};
         static List<newbone> cantconvertyet = new List<newbone>();
         static List<newbone> toconvert;
+        static Dictionary<string, bool> isParentActif = new Dictionary<string, bool>()
+        {
+            { "head", true },
+            { "body", true },
+            { "left_arm", true },
+            { "right_arm", true },
+            { "left_leg", true },
+            { "right_leg", true },
+        };
         static int j;
         static float[] zeros = new float[] { 0, 0, 0 };
 
@@ -54,38 +63,39 @@ namespace CPM_converter
                     }
                     if (convertedbone.Contains(bone.parent)|| bone.parent == null)
                     {
-                        if (bone.parent == "head")
+                        if (bone.parent == "head" && isParentActif["head"])
                         {
                             bone.pivot[1] += Program.skeletonparam.head_pivot_height;
                             bone.pivot[2] += Program.skeletonparam.head_offset;
                         }
-                        else if (bone.parent == "body")
+                        else if (bone.parent == "body" && isParentActif["body"] )
                         {
                             bone.pivot[1] += Program.skeletonparam.body_pivot_height;
                             bone.pivot[2] += Program.skeletonparam.body_offset;
                         }
-                        else if (bone.parent == "left_arm")
+                        else if (bone.parent == "left_arm" && isParentActif["left_arm"] )
                         {
                             bone.pivot[0] += Program.skeletonparam.arm_interval / 2;
                             bone.pivot[1] += Program.skeletonparam.arm_pivot_height;
                         }
-                        else if (bone.parent == "right_arm")
+                        else if (bone.parent == "right_arm" && isParentActif["right_arm"])
                         {
                             bone.pivot[0] -= Program.skeletonparam.arm_interval / 2;
                             bone.pivot[1] += Program.skeletonparam.arm_pivot_height;
                         }
-                        else if (bone.parent == "left_leg")
+                        else if (bone.parent == "left_leg" && isParentActif["left_leg"])
                         {
                             bone.pivot[0] += Program.skeletonparam.leg_interval / 2;
                             bone.pivot[1] += Program.skeletonparam.leg_length;
                         }
-                        else if (bone.parent == "right_leg")
+                        else if (bone.parent == "right_leg" && isParentActif["right_leg"])
                         {
                             bone.pivot[0] -= Program.skeletonparam.leg_interval / 2;
                             bone.pivot[1] += Program.skeletonparam.leg_length;
                         }
                         else
                         {
+                            if (isParentActif.ContainsKey(bone.name) && bone.parent != null) isParentActif[bone.name] = false;
                             bone.pivot[0] *= -1;
                             if (bone.parent != null)
                             {
@@ -97,7 +107,6 @@ namespace CPM_converter
                             else
                             {
                                 bone.pivot[1] = 24 + bone.pivot[1];
-                                bone.pivot[2] += 0;
                             }
                         }
                         if (bone.cubes != null)
@@ -735,11 +744,30 @@ namespace CPM_converter
             { "_sz", "getScaleZ()" },
         };
 
+        static Dictionary<string, string> inventory = new Dictionary<string, string>()
+        {
+            { "inv_mainhand", "entity.getMainHandItem().getItem()" },
+            { "inv_offhand", "entity.getOffHandItem().getItem()" },
+            { "inv_chestplate", "entity.getChestplateItem().getItem()" },
+            { "inv_leggings", "entity.getLeggingsItem().getItem()" },
+            { "inv_boots", "entity.getBootsItem().getItem()" },
+            { "inv_helmet", "entity.getHelmetItem().getItem()" },
+            { "current_pose", "entity.getPose()" }
+        };
+
         static string know_name(string oldname)
         {
             if (knowfunctions.ContainsKey(oldname)) return knowfunctions[oldname];
+            if (inventory.ContainsKey(oldname)) return inventory[oldname];
             string terminaison = "";
             if (knowTerminasion.TryGetValue(oldname.Substring(oldname.Length - 3), out terminaison)) return $"model.getBone(\"{oldname.Remove(oldname.Length - 3)}\").{terminaison}";
+            if (oldname.StartsWith("inv_main"))
+            {
+                int index = int.Parse(oldname.Substring(8));
+                return $"entity.getInventoryItem().getItem({index})";
+            }
+            if (oldname.StartsWith("item_")) return '"' + oldname.Substring(5) + '"';
+            if (oldname.StartsWith("pose_")) return '"' + oldname.Substring(5) + '"';
             return oldname;
         }
     }

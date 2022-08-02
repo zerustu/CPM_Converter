@@ -14,6 +14,7 @@ namespace CPM_converter
         public static Dictionary<string, float> variable = new Dictionary<string, float>()
         {
             { "limb_swing", 0 },
+            { "last_limb_swing", 0 },
             { "limb_speed", 0 },
             { "age", 0 },
             { "head_yaw", 0 },
@@ -47,7 +48,6 @@ namespace CPM_converter
             { "is_first_person", 0 },
             { "pi", (float)Math.PI },
             { "time", 0 },
-            { "temp", 0 }
         };
         public static int[] texturesize = null;
         public static string animation = "";
@@ -57,12 +57,12 @@ namespace CPM_converter
             string path = "";
             if (args.Length > 0)
             {
-                path = args[0];
+                path = args[0] + @"\model.json";
             }
             while (!File.Exists(path))
             {
                 Console.WriteLine("please enter the file :");
-                path = Console.ReadLine();
+                path = Console.ReadLine() + @"\model.json";
                 Console.Clear();
                 Console.WriteLine("the file was not found.");
             }
@@ -70,9 +70,6 @@ namespace CPM_converter
             Console.WriteLine("loading the model.");
             string jsonmodel = File.ReadAllText(path); 
             string newpath = path.Remove(path.LastIndexOf('\\') + 1) + "converted";
-            Directory.CreateDirectory(newpath);
-            string anim_path = newpath + @"\animation.js";
-            File.Create(anim_path).Close();
 
             //deserialize the object
             model themodel = JsonConvert.DeserializeObject<model>(jsonmodel);
@@ -101,12 +98,13 @@ namespace CPM_converter
             {
                 animation += item.Key + ", ";
             }
-            animation = animation.Remove(animation.Length - 2) + "; \n\n function init(entity, model) \n {\n";
+            int safezone = animation.Length;
+            animation = animation.Remove(animation.Length - 2) + "; \n\n function init(entity, model) {\n";
             foreach (var item in variable)
             {
                 animation += item.Key + " = " + item.Value + ";\n";
             }
-            animation = animation + "} \n \n function tick(entity, model) \n{\n";
+            animation = animation + "} \n \n function tick(entity, model) {\nlimb_speed = entity.getAnimPosition() - last_limb_swing;\n";
             foreach (var item in themodel.tickVars)
             {
                 animation += $"tvl_{item.Key} = tvc_{item.Key};\n {convertlist.setvar("tvc_" + item.Key, item.Value[2])}";
@@ -115,10 +113,10 @@ namespace CPM_converter
             {
                 if (item.Value != convertlist.stringToDoble(item.Value).ToString())
                 {
-                    animation += convertlist.setvar(item.Key, item.Value);
+                    animation += convertlist.setvar("var_" + item.Key, item.Value);
                 }
             }
-            animation += "}\n \nfunction update(entity, model)\n{\n";
+            animation += "last_limb_swing = entity.getAnimPosition() ; \n}\n \nfunction update(entity, model) {\n";
             foreach (var variable in themodel.tickVars)
             {
                 animation += $"tvp_{variable.Key} = entity.getPartial()*tvc_{variable.Key} + (1-entity.getPartial())*tvl_{variable.Key};\n";
@@ -142,7 +140,12 @@ namespace CPM_converter
             boneslist = newbones.ToArray();
 
             Console.WriteLine("conversion complete");
-            File.WriteAllText(anim_path, animation);
+            animation += "}";
+            animation = animation.Remove(safezone) + animation.Substring(safezone).Replace(',', '.').Replace("entity. model", "entity, model");
+            Directory.CreateDirectory(newpath);
+            string anim_path = newpath + @"\animation.js";
+            File.Create(anim_path).Close();
+            File.WriteAllText(anim_path, animation.Replace("abs", "Math.abs").Replace("sin", "Math.sin").Replace("cos", "Math.cos").Replace("tan", "Math.tan").Replace("asin", "Math.asin").Replace("acos", "Math.acos").Replace("atan", "Math.atan"));
             if (texturesize == null)
             {
                 texturesize = new int[2];

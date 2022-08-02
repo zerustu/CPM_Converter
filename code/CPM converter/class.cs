@@ -89,10 +89,11 @@ namespace CPM_converter
         string id;
         string parent;
         string texture;
+        string visible;
         string[] position;
         string[] rotation;
-        boxe[] boxes;
         int[] textureSize;
+        boxe[] boxes;
 
         public string Id { get => id; set => id = value; }
         public string Parent { get => parent; set => parent = value; }
@@ -100,7 +101,8 @@ namespace CPM_converter
         public string[] Position { get => position; set => position = value; }
         public string[] Rotation { get => rotation; set => rotation = value; }
         public boxe[] Boxes { get => boxes; set => boxes = value; }
-        public int[] TextureSize { get => textureSize; }
+        public int[] TextureSize { get => textureSize; set => textureSize = value;  }
+        public string Visible { get => visible; set => visible = value; }
     }
     class bonetoken
     {

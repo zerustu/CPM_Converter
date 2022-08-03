@@ -51,10 +51,12 @@ namespace CPM_converter
         };
         public static int[] texturesize = null;
         public static string animation = "";
+        public static string path = "";
+        public static texturemanager texturemanager;
 
         static void Main(string[] args)
         {
-            string path = "";
+            texturemanager = new texturemanager();
             if (args.Length > 0)
             {
                 path = args[0] + @"\model.json";
@@ -68,8 +70,9 @@ namespace CPM_converter
             }
             Console.Clear();
             Console.WriteLine("loading the model.");
-            string jsonmodel = File.ReadAllText(path); 
-            string newpath = path.Remove(path.LastIndexOf('\\') + 1) + "converted";
+            string jsonmodel = File.ReadAllText(path);
+            path = path.Remove(path.LastIndexOf('\\') + 1);
+            string newpath = path + "converted";
 
             //deserialize the object
             model themodel = JsonConvert.DeserializeObject<model>(jsonmodel);
@@ -137,6 +140,22 @@ namespace CPM_converter
 
             Console.WriteLine("calculating new coordinates");
             List<newbone> newbones = convertlist.convertbones(boneslist); //go from relative position to absolute position
+
+            foreach (var item in newbones)
+            {
+                if (item.TextureIndex == -1 && item.parent != null)
+                {
+                    item.TextureIndex = newbones.Find( a => a.name == item.parent ).TextureIndex;
+                }
+                if (item.cubes != null && item.TextureIndex != -1)
+                {
+                    int offset = texturemanager.getOffset(item.TextureIndex);
+                    foreach (var cube in item.cubes)
+                    {
+                        cube.uv[0] += offset;
+                    }
+                }
+            }
             boneslist = newbones.ToArray();
 
             Console.WriteLine("conversion complete");
@@ -146,19 +165,7 @@ namespace CPM_converter
             string anim_path = newpath + @"\animation.js";
             File.Create(anim_path).Close();
             File.WriteAllText(anim_path, animation.Replace("abs", "Math.abs").Replace("sin", "Math.sin").Replace("cos", "Math.cos").Replace("tan", "Math.tan").Replace("asin", "Math.asin").Replace("acos", "Math.acos").Replace("atan", "Math.atan"));
-            if (texturesize == null)
-            {
-                texturesize = new int[2];
-                var buff = new byte[32];
-                using (var d = File.OpenRead(path.Remove(path.LastIndexOf('\\') + 1) + texturename + ".png"))
-                {
-                    d.Read(buff, 0, 32);
-                }
-                const int wOff = 16;
-                const int hOff = 20;
-                texturesize[0] = BitConverter.ToInt32(new[] { buff[wOff + 3], buff[wOff + 2], buff[wOff + 1], buff[wOff + 0], }, 0);
-                texturesize[1] = BitConverter.ToInt32(new[] { buff[hOff + 3], buff[hOff + 2], buff[hOff + 1], buff[hOff + 0], }, 0);
-            }
+            
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.NullValueHandling = NullValueHandling.Ignore;
             string newmodeljson = JsonConvert.SerializeObject(newmod, Formatting.Indented, settings);
@@ -166,8 +173,8 @@ namespace CPM_converter
         {
                 " + '"' + "description" + '"' + @": {
                     " + '"' + "identifier" + '"' + ": " + '"' + "geometry.steve" + '"' + @",
-				" + '"' + "texture_width" + '"' + @": " + texturesize[0] + @",
-				" + '"' + "texture_height" + '"' + @": " + texturesize[1] + @",
+				" + '"' + "texture_width" + '"' + @": " + (texturemanager.weidth / texturemanager.smallest_res) + @",
+				" + '"' + "texture_height" + '"' + @": " + (texturemanager.height / texturemanager.smallest_res) + @",
 				" + '"' + "visible_bounds_width" + '"' + @": 4,
 				" + '"' + "visible_bounds_height" + '"' + @": 3.5,
 				" + '"' + "visible_bounds_offset" + '"' + @": [0, 1.25, 0]
@@ -177,7 +184,7 @@ namespace CPM_converter
 
             File.WriteAllText(newpath + @"\model.json", newmodeljson);
             File.WriteAllText(newpath + @"\"+newmod.name + ".geo.json", newgeo);
-            File.Copy(path.Remove(path.LastIndexOf('\\') + 1) + texturename + ".png", newpath + @"\" + texturename + ".png");
+            texturemanager.export_tex(newpath + @"\" + newmod.name +".png");
             Console.Clear();
             Console.WriteLine("The new file is ready, bye");
             System.Threading.Thread.Sleep(2000);

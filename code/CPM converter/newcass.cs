@@ -27,8 +27,9 @@ namespace CPM_converter
             { "param", param }
             };
             parts = new Dictionary<string, object>[1];
-            parts[0] = new Dictionary<string, object>() { { "name", name + ".geo" }, { "texture", Program.texturename } };
+            parts[0] = new Dictionary<string, object>() { { "name", name + ".geo" }, { "texture", name + ".png" } };
             size = model.boundingBox;
+            if (size != null) size.Remove("dying");
             if (model.eyeHeight != null)
             {
                 eye_height = new Dictionary<string, float[]>();
@@ -37,8 +38,8 @@ namespace CPM_converter
                     if (item.Key != "dying") eye_height.Add(item.Key, new float[2] { item.Value, 0 });
                 }
             }
-            size.Remove("dying");
         }
+
     }
 
     class parameters
@@ -101,6 +102,9 @@ namespace CPM_converter
         public newcube[] cubes;
         static string[] axis = { "X", "Y", "Z" };
         static int[] axisrerout = { 1, 0, 2 };
+        private int textureIndex;
+
+        public int TextureIndex { get => textureIndex; set => textureIndex = value; }
 
         public newbone(Bone bone)
         {
@@ -160,15 +164,19 @@ namespace CPM_converter
             }
             if (bone.Texture != null)
             {
-                if (!bone.Texture.StartsWith("if")& Program.texturename == "N/A")
+                if (bone.Texture.StartsWith("if"))
                 {
-                    Program.texturename = bone.Texture.Remove(0, 4);
-                    if (bone.TextureSize != null)
-                    {
-                        Program.texturesize = bone.TextureSize;
-                    }
+                    bone.Texture = bone.Texture.Substring(bone.Texture.IndexOf("tex."));
+                    bone.Texture = bone.Texture.Remove(bone.Texture.IndexOf(','));
                 }
+                int size = -1;
+                if (bone.TextureSize != null)
+                {
+                    size = bone.TextureSize[1];
+                }
+                textureIndex = Program.texturemanager.addText(Program.path + bone.Texture.Substring(4) + ".png", size);
             }
+            else { textureIndex = -1; }
         }
 
         public newbone(string name, string parent, float[] pivot, float[] rotation, newcube[] cubes)

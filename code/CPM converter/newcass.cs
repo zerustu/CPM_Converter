@@ -27,7 +27,7 @@ namespace CPM_converter
             { "param", param }
             };
             parts = new Dictionary<string, object>[1];
-            parts[0] = new Dictionary<string, object>() { { "name", name + ".geo" }, { "texture", name + ".png" } };
+            parts[0] = new Dictionary<string, object>() { { "name", name + ".geo" }, { "texture", name } };
             size = model.boundingBox;
             if (size != null) size.Remove("dying");
             if (model.eyeHeight != null)

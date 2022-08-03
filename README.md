@@ -15,8 +15,9 @@ For any modification after my tool, i recommand importing it in blockbench as my
 # HOW TO USE:
 
 -when run, the programme will first ask the model file.
-
 You must provide a full path to the unzip model folder (exemple : D:\jeu\minecraft\.minecraft_1.16\custom-model\models\ORI)
+
+
 
 ▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀
 
@@ -27,7 +28,7 @@ You must provide a full path to the unzip model folder (exemple : D:\jeu\minecra
 	-add default value for is_first_person and age
 	-fix the geometry file having defernt name in the model.json then the real file
 	-auto copy the texturefile (so you don't have to :) )
-  
+
 1.4:
 	-add default value for all CPM variales
 	-add animation conversion and animation.js generation

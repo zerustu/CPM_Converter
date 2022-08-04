@@ -122,6 +122,17 @@ namespace CPM_converter
                             }
                         }
                         convertedbone.Add(bone.name);
+                        if (bone.getPhysics() != null)
+                        {
+                            newbone father = listnewbone.Find(a => a.name == bone.parent);
+                            (newbone, newbone) anims = create_anim_bones(bone, father);
+                            if (anims.Item1 != null)
+                            {
+                                bone.parent = bone.name + "_physics_reset";
+                                listnewbone.Add(anims.Item1);
+                                listnewbone.Add(anims.Item2);
+                            }
+                        }
                         listnewbone.Add(bone);
                         numbertoconvert--;
                         Console.SetCursorPosition(curspos[0], curspos[1]);
@@ -769,6 +780,44 @@ namespace CPM_converter
             if (oldname.StartsWith("item_")) return '"' + oldname.Substring(5) + '"';
             if (oldname.StartsWith("pose_")) return '"' + oldname.Substring(5) + '"';
             return oldname;
+        }
+
+        static (newbone, newbone) create_anim_bones(newbone bone, newbone parent)
+        {
+            float[] posbone = bone.pivot;
+            float[] posparent = parent.pivot;
+            double x = posbone[0] - posparent[0];
+            double y = posbone[1] - posparent[1];
+            double z = posbone[2] - posparent[2];
+
+            if (Math.Abs(x) + Math.Abs(z) == 0) return (null, null);
+
+            double rz = z < 0 ? Math.PI : 0;
+            double ry = Math.Atan(x / Math.Abs(z));
+            double rx = Math.Atan(y / Math.Sqrt(x * x + z * z));
+            rx = z < 0 ? Math.PI - rx : -rx;
+
+            float[] rot1 = new float[3] { (float)rx, (float)ry, (float)rz };
+            newbone anim1 = new newbone(bone.name + "_physics", parent.name, posbone, rot1, null);
+            double rz2 = ry * Math.Sin(rx);
+
+            double x2 = -Math.Cos(rz2) * Math.Sin(ry) + Math.Sin(rz2) * Math.Sin(rx) * Math.Cos(ry);
+            double y2 = Math.Cos(rz2) * Math.Sin(rx) * Math.Cos(ry) + Math.Sin(rz2) * Math.Sin(ry);
+            double z2 = Math.Cos(rx) * Math.Cos(ry);
+
+
+
+            rz2 += z2 < 0 ? Math.PI : 0;
+            double ry2 = Math.Atan(x2 / Math.Abs(z2));
+            double rx2 = Math.Atan(y2 / Math.Sqrt(x2 * x2 + z2 * z2));
+            rx2 = z2 < 0 ? Math.PI - rx2 : -rx2;
+
+            float[] rot2 = new float[3] { (float)rx2, (float)ry2, (float)rz2 };
+            newbone anim2 = new newbone(bone.name + "_physics_reset", bone.name + "_physics", posbone, rot2, null);
+
+            Program.bonesPhysics.Add(bone.name + "_physics", bone.getPhysics());
+
+            return (anim1, anim2);
         }
     }
 }

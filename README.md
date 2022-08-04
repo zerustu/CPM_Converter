@@ -1,14 +1,22 @@
 # CPM_Converter
 This tool can convert 1.12 CPM model to 1.16 CPM model.
 
-this tool is nearly done. it can output working models with animation from the old one. some known issue include pivot point not at the correct position for complex model and not importing phisics yet.
+for now i will consider this tool done.
+
+it can take a model that have animation, physics and multiple texture file and export a working 1.16 model.
+if the old model have multiple texture file, they will be mmerge into one single texture file
+the animation will be ported and physics will be reported as well.
 
 # NOTE:
-my tool does not handle scalling and multi texture.
+my tool does not handle scalling.
 
-scalling does not work the same in 1.12 and in 1.16 so there is no easy conversion methode. I may work on that latter.
+scalling does not work the same in 1.12 and in 1.16 so there is no easy conversion methode.
 
-For any modification after my tool, i recommand importing it in blockbench as my output file doesn't contain breakline or tabulation so it is especialy hard to read.
+Things this tool doesn't do of do badly :
+	-it will create a lot of bones because of of rotation work in CPM 1.12
+	-the final .geo file is really hard to read because there is no indentation so if you want to modify it, i recommand you to import it in blockbench
+	-the physics value aren't converted, so the physics are really bad. it is up to you to change them, they are in the animation.js file at the end of the init function (just befor the tick function)
+	-i know that in some case, a pivot point might not end up at the correct position but i don't know why.
 
 ▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀
 
@@ -16,6 +24,8 @@ For any modification after my tool, i recommand importing it in blockbench as my
 
 -when run, the programme will first ask the model file.
 You must provide a full path to the unzip model folder (exemple : D:\jeu\minecraft\.minecraft_1.16\custom-model\models\ORI)
+
+quick video available here : https://youtu.be/R-NdDb2_T1Q
 
 
 
@@ -39,6 +49,9 @@ You must provide a full path to the unzip model folder (exemple : D:\jeu\minecra
 1.5:
 	-add texture merger and rework how texture are handle : now can convert a multi-texture model into a single texture model.
 	
+1.6:
+	-now export the physics to the new model (keep the old value so it is not the best physics)
+
 ▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀
 
 Credit:

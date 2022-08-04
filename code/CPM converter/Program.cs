@@ -53,6 +53,7 @@ namespace CPM_converter
         public static string animation = "";
         public static string path = "";
         public static texturemanager texturemanager;
+        public static Dictionary<string, float[]> bonesPhysics = new Dictionary<string, float[]>();
 
         static void Main(string[] args)
         {
@@ -141,26 +142,41 @@ namespace CPM_converter
             Console.WriteLine("calculating new coordinates");
             List<newbone> newbones = convertlist.convertbones(boneslist); //go from relative position to absolute position
 
+            Console.WriteLine("remapping texture");
+            int[] curspos = new int[] { Console.CursorLeft, Console.CursorTop };
+            int total = newbones.Count;
+            int numbertoconvert = newbones.Count;
             foreach (var item in newbones)
             {
-                if (item.TextureIndex == -1 && item.parent != null)
+                if (item.getTextureIndex() == -1 && item.parent != null)
                 {
-                    item.TextureIndex = newbones.Find( a => a.name == item.parent ).TextureIndex;
+                    item.setTextureIndex(newbones.Find( a => a.name == item.parent ).getTextureIndex());
                 }
-                if (item.cubes != null && item.TextureIndex != -1)
+                if (item.cubes != null && item.getTextureIndex() != -1)
                 {
-                    int offset = texturemanager.getOffset(item.TextureIndex);
+                    int offset = texturemanager.getOffset(item.getTextureIndex());
                     foreach (var cube in item.cubes)
                     {
                         cube.uv[0] += offset;
                     }
                 }
+                numbertoconvert--;
+                Console.SetCursorPosition(curspos[0], curspos[1]);
+                Console.WriteLine((total - numbertoconvert) + "/" + total);
             }
             boneslist = newbones.ToArray();
 
+            Console.WriteLine("adding physics in the animation.js");
+            string physicsCode = "";
+            foreach (var item in bonesPhysics)
+            {
+                physicsCode += $"model.getBone(\"{item.Key}\").physicalize({item.Value[0]}|{item.Value[1]}|{item.Value[2]}|{item.Value[3]}|{item.Value[4]});\n";
+            }
+            physicsCode = physicsCode.Replace(',', '.').Replace('|', ',');
             Console.WriteLine("conversion complete");
             animation += "}";
             animation = animation.Remove(safezone) + animation.Substring(safezone).Replace(',', '.').Replace("entity. model", "entity, model");
+            animation = animation.Remove(animation.IndexOf("} \n \n function tick(entity,")) + physicsCode + animation.Substring(animation.IndexOf("} \n \n function tick(entity,"));
             Directory.CreateDirectory(newpath);
             string anim_path = newpath + @"\animation.js";
             File.Create(anim_path).Close();

@@ -22,6 +22,7 @@ namespace CPM_converter
 
         public int addText(string texName, int size)
         {
+            if (texName.EndsWith("skin.png")) return -1;
             Image img = Image.FromFile(texName);
             if (img == null) return -1;
             int res = img.Height / size;

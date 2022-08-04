@@ -103,8 +103,11 @@ namespace CPM_converter
         static string[] axis = { "X", "Y", "Z" };
         static int[] axisrerout = { 1, 0, 2 };
         private int textureIndex;
+        private float[] physics;
 
-        public int TextureIndex { get => textureIndex; set => textureIndex = value; }
+        public int getTextureIndex() { return textureIndex; }
+        public void setTextureIndex(int textureIndex) { this.textureIndex = textureIndex; }
+        public float[] getPhysics() { return physics; }
 
         public newbone(Bone bone)
         {
@@ -172,6 +175,7 @@ namespace CPM_converter
                 textureIndex = Program.texturemanager.addText(Program.path + bone.Texture.Substring(4) + ".png", size);
             }
             else { textureIndex = -1; }
+            physics = bone.Physics;
         }
 
         public newbone(string name, string parent, float[] pivot, float[] rotation, newcube[] cubes)

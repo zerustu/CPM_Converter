@@ -179,7 +179,14 @@ namespace CPM_converter
                 textureIndex = Program.texturemanager.addText(Program.path + bone.Texture.Substring(4) + ".png", size);
             }
             else { textureIndex = -1; }
-            physics = bone.Physics;
+            if (bone.Physics != null)
+            {
+                physics = new float[5];
+                for (int i = 0; i < 5; i++)
+                {
+                    physics[i] = (float)convertlist.stringToDoble(bone.Physics[i]);
+                }
+            }
         }
 
         public newbone(string name, string parent, float[] pivot, float[] rotation, newcube[] cubes)
@@ -189,6 +196,7 @@ namespace CPM_converter
             this.pivot = pivot;
             this.rotation = rotation;
             this.cubes = cubes;
+            this.textureIndex = -1;
         }
     }
     class geo

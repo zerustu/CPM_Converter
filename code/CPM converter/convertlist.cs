@@ -67,31 +67,37 @@ namespace CPM_converter
                         {
                             bone.pivot[1] += Program.skeletonparam.head_pivot_height;
                             bone.pivot[2] += Program.skeletonparam.head_offset;
+                            if (bone.getTextureIndex() == -1) bone.setTextureIndex(-2);
                         }
                         else if (bone.parent == "body" && isParentActif["body"] )
                         {
                             bone.pivot[1] += Program.skeletonparam.body_pivot_height;
                             bone.pivot[2] += Program.skeletonparam.body_offset;
+                            if (bone.getTextureIndex() == -1) bone.setTextureIndex(-2);
                         }
                         else if (bone.parent == "left_arm" && isParentActif["left_arm"] )
                         {
                             bone.pivot[0] += Program.skeletonparam.arm_interval / 2;
                             bone.pivot[1] += Program.skeletonparam.arm_pivot_height;
+                            if (bone.getTextureIndex() == -1) bone.setTextureIndex(-2);
                         }
                         else if (bone.parent == "right_arm" && isParentActif["right_arm"])
                         {
                             bone.pivot[0] -= Program.skeletonparam.arm_interval / 2;
                             bone.pivot[1] += Program.skeletonparam.arm_pivot_height;
+                            if (bone.getTextureIndex() == -1) bone.setTextureIndex(-2);
                         }
                         else if (bone.parent == "left_leg" && isParentActif["left_leg"])
                         {
                             bone.pivot[0] += Program.skeletonparam.leg_interval / 2;
                             bone.pivot[1] += Program.skeletonparam.leg_length;
+                            if (bone.getTextureIndex() == -1) bone.setTextureIndex(-2);
                         }
                         else if (bone.parent == "right_leg" && isParentActif["right_leg"])
                         {
                             bone.pivot[0] -= Program.skeletonparam.leg_interval / 2;
                             bone.pivot[1] += Program.skeletonparam.leg_length;
+                            if (bone.getTextureIndex() == -1) bone.setTextureIndex(-2);
                         }
                         else
                         {

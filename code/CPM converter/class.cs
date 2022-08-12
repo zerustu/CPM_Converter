@@ -94,7 +94,7 @@ namespace CPM_converter
         string[] rotation;
         int[] textureSize;
         boxe[] boxes;
-        float[] physics;
+        string[] physics;
 
         public string Id { get => id; set => id = value; }
         public string Parent { get => parent; set => parent = value; }
@@ -104,6 +104,6 @@ namespace CPM_converter
         public boxe[] Boxes { get => boxes; set => boxes = value; }
         public int[] TextureSize { get => textureSize; set => textureSize = value;  }
         public string Visible { get => visible; set => visible = value; }
-        public float[] Physics { get => physics; set => physics = value; }
+        public string[] Physics { get => physics; set => physics = value; }
     }
 }

@@ -69,6 +69,7 @@ namespace CPM_converter
                 Console.Clear();
                 Console.WriteLine("the file was not found.");
             }
+            Console.Clear();
             Console.WriteLine("loading the model.");
             string jsonmodel = File.ReadAllText(path);
             path = path.Remove(path.LastIndexOf('\\') + 1);

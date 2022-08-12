@@ -87,8 +87,8 @@ namespace CPM_converter
             size[0] = convertlist.stringToDoble(boxe.coordinates[3]);
             size[1] = convertlist.stringToDoble(boxe.coordinates[4]);
             size[2] = convertlist.stringToDoble(boxe.coordinates[5]);
-            this.uv = new int[3];
-            for (int i = 0; i < 3; i++)
+            this.uv = new int[2];
+            for (int i = 0; i < 2; i++)
             {
                 this.uv[i] = (int)Math.Floor(boxe.textureOffset[i]);
             }

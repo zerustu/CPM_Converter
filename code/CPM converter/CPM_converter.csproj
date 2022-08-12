@@ -6,7 +6,7 @@
     <RootNamespace>CPM_converter</RootNamespace>
     <Authors>zerustu</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.6.2</Version>
+    <Version>1.6.3</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 

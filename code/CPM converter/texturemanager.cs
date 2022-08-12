@@ -22,7 +22,7 @@ namespace CPM_converter
 
         public int addText(string texName, int size)
         {
-            if (texName.EndsWith("skin.png")) return -1;
+            if (texName.EndsWith("skin.png")) return -2;
             Image img = Image.FromFile(texName);
             if (img == null) return -1;
             int res = img.Height / size;
@@ -56,7 +56,8 @@ namespace CPM_converter
 
         public int getOffset(int index)
         {
-            return texlist[index].Item2/smallest_res;
+            if (index >= 0 && index < texlist.Count) return texlist[index].Item2/smallest_res;
+            else return 0;
         }
 
         public void export_tex(string path)
